@@ -6,10 +6,16 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { BookableService } from './service/bookable.service';
 import { BookingService } from './service/booking.service';
+import { SearchComponent } from './search/search.component';
+import { BookableComponent } from './bookable/bookable.component';
+import { BookingComponent } from './booking/booking.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SearchComponent,
+    BookableComponent,
+    BookingComponent
   ],
   imports: [
     BrowserModule,

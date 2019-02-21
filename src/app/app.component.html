@@ -34,72 +34,9 @@
     <p class="lead">あなたの旅行やビジネスを支えるホテルを、全国からご用意しました。お好きな部屋がみつかりましたら、予約ボタンをポチッとしてください。</p>
 </div>
 
-<div class="container">
-    <ul class="card-deck mb-3 text-center">
-        <li *ngFor="let bookableData of bookableDataList" class="card mb-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">{{ bookableData.hotel.name }}</h4>
-            </div>
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">{{ bookableData.hotel.charge }}<small class="text-muted">円</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                    <li>残り{{ bookableData.room_count }}部屋</li>
-                    <li>{{ bookableData.hotel.option1 }}</li>
-                    <li>{{ bookableData.hotel.option2 }}</li>
-                    <li>{{ bookableData.hotel.option3 }}</li>
-                </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary">予約する!</button>
-            </div>
-        </li>
-        <!--
-        <li class="card mb-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Free</h4>
-            </div>
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                    <li>10 users included</li>
-                    <li>2 GB of storage</li>
-                    <li>Email support</li>
-                    <li>Help center access</li>
-                </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary">予約する!</button>
-            </div>
-        </li>
-        <li class="card mb-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Pro</h4>
-            </div>
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                    <li>20 users included</li>
-                    <li>10 GB of storage</li>
-                    <li>Priority email support</li>
-                    <li>Help center access</li>
-                </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary">予約する!</button>
-            </div>
-        </li>
-        <li class="card mb-4 box-shadow">
-            <div class="card-header">
-                <h4 class="my-0 font-weight-normal">Enterprise</h4>
-            </div>
-            <div class="card-body">
-                <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-                <ul class="list-unstyled mt-3 mb-4">
-                    <li>30 users included</li>
-                    <li>15 GB of storage</li>
-                    <li>Phone and email support</li>
-                    <li>Help center access</li>
-                </ul>
-                <button type="button" class="btn btn-lg btn-block btn-primary">予約する!</button>
-            </div>
-        </li>
-        -->
-    </ul>
+<app-bookable></app-bookable>
 
+<div class="container">
     <footer class="pt-4 my-md-5 pt-md-5 border-top">
         <div class="row">
             <div class="col-12 col-md">
@@ -123,7 +60,7 @@
                 </ul>
             </div>
             <div class="col-6 col-md">
-                <h5>あ問い合わせ先</h5>
+                <h5>お問い合わせ先</h5>
                 <ul class="list-unstyled text-small">
                     <li><a class="text-muted" href="#">電話</a></li>
                     <li><a class="text-muted" href="#">メール</a></li>
