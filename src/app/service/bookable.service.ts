@@ -5,6 +5,10 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 
 import { BookableData } from '../model/bookable-data.model';
+import { SearchParams } from '../other/search.params';
+import { RequestQueryBuilder } from '../other/search-query-builder';
+import { IQueryParams } from '../other/query-params.interface';
+
 //import { AuthService } from '../user/auth.service';
 //import { StepFunctions } from 'aws-sdk';
 import { Session } from 'protractor';
@@ -18,7 +22,7 @@ export class BookableService {
   dataIsLoading = new BehaviorSubject<boolean>(false);
   dataLoaded = new Subject<BookableData[]>();
   dataLoadFailed = new Subject<boolean>();
-  bookableData: BookableData;
+  // bookableData: BookableData;
   bookableDataList:BookableData[];
 
   // constructor(private http: Http,
@@ -27,7 +31,7 @@ export class BookableService {
     console.log('call bookableService constructor...')
   }
 
-  onRetrieveData(all = true) {
+  onRetrieveData(queryParams:IQueryParams) {
     this.dataLoaded.next(null);
     this.dataLoadFailed.next(false);
     // this.authService.getAuthenticatedUser().getSession((err, session) => {
@@ -36,8 +40,11 @@ export class BookableService {
       // if (!all) {
       //   urlParam = 'single';
       // }
-      console.log('call onRetrieveData...')
-      this.http.get(API_ENTRY_POINT_URL + 'bookables/?' + 'dtFrom=' + '2019-01-10' + '&dtTo=' + '2019-01-15', {
+      let rqb:RequestQueryBuilder= new RequestQueryBuilder(queryParams);
+      let requestParams: string = rqb.toRequestParameter();
+      console.log('call onRetrieveData...' + requestParams);
+
+      this.http.get(API_ENTRY_POINT_URL + 'bookables/?' + requestParams, {
         headers: new Headers({'Authorization': SESSION_JWT_TOKEN})
       })
         .map(
@@ -45,19 +52,19 @@ export class BookableService {
         )
         .subscribe(
           (data) => {
-            if (all) {
+            // if (all) {
               console.log(data);
               this.bookableDataList = data;
               this.dataLoaded.next(data);
-            } else {
-              console.log(data);
-              if (!data) {
-                this.dataLoadFailed.next(true);
-                return;
-              }
-              this.bookableData = data[0];
-              this.dataEdited.next(true);
-            }
+            // } else {
+            //   console.log(data);
+            //   if (!data) {
+            //     this.dataLoadFailed.next(true);
+            //     return;
+            //   }
+            //   this.bookableData = data[0];
+            //   this.dataEdited.next(true);
+            // }
           },
           (error) => {
             this.dataLoadFailed.next(true);

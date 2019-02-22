@@ -6,8 +6,9 @@
             </div>
             <div class="card-body">
                 <h1 class="card-title pricing-card-title">{{ bookableData.hotel.charge }}<small class="text-muted">円</small></h1>
+                <h3 class="card-title pricing-card-title"><small class="text-muted">残り</small>
+                  {{ bookableData.room_count }}<small class="text-muted">部屋</small></h3>
                 <ul class="list-unstyled mt-3 mb-4">
-                    <li>残り{{ bookableData.room_count }}部屋</li>
                     <li>{{ bookableData.hotel.option1 }}</li>
                     <li>{{ bookableData.hotel.option2 }}</li>
                     <li>{{ bookableData.hotel.option3 }}</li>
