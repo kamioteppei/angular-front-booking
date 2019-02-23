@@ -1,19 +1,24 @@
-<form class="form-search center-block"  (ngSubmit)="onSubmit()" #searchForm="ngForm">
-    <div class="container center-block mb-5 ">
-      <div class="row">
-          <div class="col-xs-1 ml-1 mr-1 mb-1">
-              <label for="dtFrom" class="col-xs-1 ml-2 mb-1 ">宿泊期間</label>
-        </div>
-        <div class=" col-xs-1 ml-2 mr-1 mb-1 ">
-            <input type="date" id="dtFrom" name="dtFrom" ngModel class="form-control" required autofocus />
-        </div>
-            <label for="dtTo" class="col-xs-1 ml-1 mr-1 mb-1">〜</label>
-        <div class=" col-xs-1  ml-1 mr-1  mb-1">
-          <input type="date" id="dtTo" name="dtTo" ngModel class="form-control" placeholder="tomorrow" required />
-        </div>
-        <div class=" ml-2 mb-1  col-xs-1 ">
-        <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="searchForm.invalid">検索する!</button>
+<form class="form-search"  (ngSubmit)="onSubmit()" #searchForm="ngForm">
+    <div class="container mb-5 ">
+      <div class="row mx-auto text-center ">
+          <div class="col col-xs-1 ml-1 mr-1 mb-1 pt-2">
+              <span></span>
+          </div>
+          <div class="col col-xs-2 ml-1 mr-1 mb-1 pt-2">
+              <label for="dtFrom" class="text-nowrap">宿泊期間</label>
+          </div>
+          <div class="col col-xs-3 ml-2 mr-1 mb-1 ">
+              <input type="date" id="dtFrom" name="dtFrom" ngModel class="form-control" required autofocus />
+          </div>
+          <div class="col col-xs-1 ml-1 mr-1 mb-1 pt-2">
+            <label for="dtTo" class="text-nowrap">〜</label>
+          </div>
+          <div class="col col-xs-3 ml-1 mr-1 mb-1">
+            <input type="date" id="dtTo" name="dtTo" ngModel class="form-control" placeholder="tomorrow" required />
+          </div>
+          <div class="col col-xs-2 ml-2 mb-1">
+            <button class="btn btn-md btn-primary btn-block" type="submit" [disabled]="searchForm.invalid">検索する!</button>
+          </div>
       </div>
-    </div>
   </div>
 </form>
