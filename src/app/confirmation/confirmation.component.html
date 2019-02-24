@@ -1,0 +1,7 @@
+<div *ngIf="bsAlertParams.isMessageShow" class="row">
+  <div class="col col-xs-12 mx-auto text-center">
+    <div class="alert"  [ngClass]="(bsAlertParams.isSuccess == true) ? 'alert-success':'alert-danger'" role="alert">
+      <strong>{{ bsAlertParams.status }}</strong> {{ bsAlertParams.message }}
+    </div>
+  </div>
+</div>

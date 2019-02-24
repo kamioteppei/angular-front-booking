@@ -1,4 +1,50 @@
-<ng4-alert></ng4-alert>
-<p>
-  booking works!
-</p>
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Booking.niko</h1>
+    <p class="lead">あなたの旅行やビジネスを支えるホテルをご予約できます。お好きな部屋がみつかりましたら、予約ボタンをポチッとしてください。</p>
+</div>
+
+<form class="form-search"  (ngSubmit)="onSubmit()" #searchForm="ngForm">
+    <div class="container mb-5 ">
+      <div class="row mx-auto text-center ">
+          <div class="col col-xs-1 ml-1 mr-1 mb-1 pt-2">
+              <span></span>
+          </div>
+          <div class="col col-xs-2 ml-1 mr-1 mb-1 pt-2">
+              <label for="dtFrom" class="text-nowrap">宿泊期間</label>
+          </div>
+          <div class="col col-xs-3 ml-2 mr-1 mb-1 ">
+              <input type="date" id="dtFrom" name="dtFrom" ngModel class="form-control" required autofocus />
+          </div>
+          <div class="col col-xs-1 ml-1 mr-1 mb-1 pt-2">
+            <label for="dtTo" class="text-nowrap">〜</label>
+          </div>
+          <div class="col col-xs-3 ml-1 mr-1 mb-1">
+            <input type="date" id="dtTo" name="dtTo" ngModel class="form-control" placeholder="tomorrow" required />
+          </div>
+          <div class="col col-xs-2 ml-2 mb-1">
+            <button class="btn btn-md btn-primary btn-block" type="submit" [disabled]="searchForm.invalid">検索する!</button>
+          </div>
+      </div>
+  </div>
+</form>
+
+<div class="container">
+    <ul class="card-deck mb-3 text-center">
+        <li *ngFor="let bookableData of bookableDataList" class="card mb-4 box-shadow">
+            <div class="card-header">
+                <h4 class="my-0 font-weight-normal">{{ bookableData.hotel.name }}</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">{{ bookableData.hotel.charge }}<small class="text-muted">円/1泊</small></h1>
+                <h3 class="card-title pricing-card-title"><small class="text-muted">残り</small>
+                  {{ bookableData.room_count }}<small class="text-muted">部屋</small></h3>
+                <ul class="list-unstyled mt-3 mb-4">
+                    <li>&nbsp;{{ bookableData.hotel.option1 }}</li>
+                    <li>&nbsp;{{ bookableData.hotel.option2 }}</li>
+                    <li>&nbsp;{{ bookableData.hotel.option3 }}</li>
+                </ul>
+                <button type="button"  (click)="onPostBookingData(bookableData)" class="btn btn-lg btn-block btn-primary">予約する!</button>
+            </div>
+        </li>
+      </ul>
+</div>

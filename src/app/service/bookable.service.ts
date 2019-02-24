@@ -13,7 +13,7 @@ import { IQueryParams } from '../other/query-params.interface';
 //import { StepFunctions } from 'aws-sdk';
 import { Session } from 'protractor';
 
-const SESSION_JWT_TOKEN:string = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWtvIiwiZXhwIjoxNTUwOTk3MjcxfQ.O9CsDYTD6YkKVz3hvaCMbvoVE6mW9vhE48mDJiV9CnW_Ikig1V4vsGK89TqtM03nwEvBuFxTqLdsR4j2wsLXGA';
+const SESSION_JWT_TOKEN:string = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWtvIiwiZXhwIjoxNTUxODc1NzAzfQ.mc-L9KoLhB84hyvTu4bsMmFlHXDN6ftaJ91G4v2qLvsgv54xSEHUSsof9WDK4FqoNbn2Z3nKja40p8qV2o-MuQ';
 const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
 
 @Injectable()

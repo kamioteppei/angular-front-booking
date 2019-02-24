@@ -5,25 +5,30 @@ import { HttpModule } from '@angular/http';
 import { Ng4AlertModule } from 'ng4-alert';
 
 import { AppComponent } from './app.component';
+// import { SignupComponent } from './user/signup/signup.component';
+// import { SigninComponent } from './user/signin/signin.component';
+import { BookingComponent } from './booking/booking.component';
+import { ConfirmationComponent } from './confirmation/confirmation.component';
+import { AppRoutingModule } from './app-routing.module';
+// import { AuthService } from './user/auth.service';
 import { BookableService } from './service/bookable.service';
 import { BookingService } from './service/booking.service';
-import { SearchComponent } from './search/search.component';
-import { BookableComponent } from './bookable/bookable.component';
-import { BookingComponent } from './booking/booking.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchComponent,
-    BookableComponent,
-    BookingComponent
+    // SignupComponent,
+    // SigninComponent,
+    BookingComponent,
+    ConfirmationComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    Ng4AlertModule.forRoot() // For bootstrap-aleart.
+    AppRoutingModule,
   ],
+  // providers: [AuthService,BookableService,BookingService],
   providers: [BookableService,BookingService],
   bootstrap: [AppComponent]
 })
