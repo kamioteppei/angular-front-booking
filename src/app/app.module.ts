@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { Ng4AlertModule } from 'ng4-alert';
 
 import { AppComponent } from './app.component';
 import { BookableService } from './service/bookable.service';
@@ -20,7 +21,8 @@ import { BookingComponent } from './booking/booking.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    Ng4AlertModule.forRoot() // For bootstrap-aleart.
   ],
   providers: [BookableService,BookingService],
   bootstrap: [AppComponent]

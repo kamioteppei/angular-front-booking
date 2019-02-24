@@ -29,12 +29,13 @@ export class BookingService {
     this.dataLoadFailed.next(false);
     this.dataIsLoading.next(true);
     this.dataEdited.next(false);
-    this.bookingData = bookingData;
+    // this.bookingData = bookingData;
 //    this.authService.getAuthenticatedUser().getSession((err, session) => {
       // if (err) {
       //   return;
       // }
-      this.http.post(API_ENTRY_POINT_URL + 'customers/301/bookings/', bookingData, {
+      let customerId: number = bookingData.customer.id;
+      this.http.post(API_ENTRY_POINT_URL + 'customers/' + customerId + '/bookings/', bookingData, {
         headers: new Headers({'Authorization': SESSION_JWT_TOKEN})
       })
         .subscribe(

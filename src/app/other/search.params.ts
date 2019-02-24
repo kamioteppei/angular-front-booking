@@ -1,6 +1,5 @@
 import { IQueryParams } from '../other/query-params.interface';
 
-// export class SearchParams extends RequestQueryBuilder{
 export class SearchParams implements IQueryParams{
   dtFrom: Date;
   dtTo: Date;
