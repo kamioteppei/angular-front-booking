@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-// import { AuthService } from './user/auth.service';
+import { AuthService } from './user/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,27 +10,25 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   isAuthenticated = false;
 
-  // constructor(private authService: AuthService,
-  //             private router: Router) {
-  // }
-  constructor(private router: Router) {
-　}
-
-  ngOnInit() {
-    // this.authService.authStatusChanged.subscribe(
-    //   (authenticated) => {
-    //     this.isAuthenticated = authenticated;
-        // if (authenticated) {
-          this.router.navigate(['/booking']);
-        // } else {
-        //   this.router.navigate(['/']);
-        // }
-    //   }
-    // );
-    // this.authService.initAuth();
+  constructor(private authService: AuthService,
+              private router: Router) {
   }
 
-  // onLogout() {
-  //   this.authService.logout();
-  // }
+  ngOnInit() {
+    this.authService.authStatusChanged.subscribe(
+      (authenticated) => {
+        this.isAuthenticated = authenticated;
+        if (authenticated) {
+          this.router.navigate(['/booking']);
+        } else {
+          this.router.navigate(['/booking']);
+        }
+      }
+    );
+    this.authService.initAuth();
+  }
+
+  onLogout() {
+    this.authService.logout();
+  }
 }

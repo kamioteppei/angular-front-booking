@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-10 col-md-6 cold-sm-offset-1 col-md-offset-3">
+    <form class="text-center jumbotron" (ngSubmit)="onSubmit()" #usrForm="ngForm">
+      <div class="form-group">
+        <label
+          for="username"
+          class="control-label">ユーザー名</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          ngModel
+          class="form-control text-center"
+          required>
+      </div>
+      <div class="form-group">
+        <label
+          for="password"
+          class="control-label">パスワード</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          ngModel
+          class="form-control text-center"
+          required>
+      </div>
+      <div class="form-group">
+        <label
+          for="confirmPassword"
+          class="control-label">パスワード確認用</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          ngModel
+          class="form-control text-center"
+          required>
+      </div>
+      <div *ngIf="usrForm.value.password !== usrForm.value.confirmPassword">パスワードが一致しません。</div>
+      <button class="btn btn-primary" type="submit"
+              [disabled]="(usrForm.value.password !== usrForm.value.confirmPassword) || usrForm.invalid">ユーザー登録
+      </button>
+    </form>
+    <div class="loader" *ngIf="isLoading"></div>
+  </div>
+</div>

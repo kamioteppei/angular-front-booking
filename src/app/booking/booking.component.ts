@@ -8,7 +8,6 @@ import { BookingData } from '../model/booking-data.model';
 import { CustomerData } from '../model/customer-data.model';
 import { RoomData } from '../model/room-data.model';
 import { SearchParams } from '../other/search.params';
-import { BsAlertParams } from '../other/bs.alert.param';
 
 @Component({
   selector: 'app-booking',
@@ -69,7 +68,7 @@ export class BookingComponent implements OnInit {
     }
 
     let dummyRoom: RoomData = {
-      id: 201,
+      id: 0,
       name: 'dummy'
     }
 
@@ -83,12 +82,7 @@ export class BookingComponent implements OnInit {
       canceled: false,
     }
     this.bookingService.onStoreData(booking);
-    // let bsAlertParams: BsAlertParams = {
-    //   isMessageShow: true,
-    //   isSuccess: true,
-    //   status: 'OK!',
-    //   message: '予約が確定しました。'
-    // }
+
     let bsAlertParams = {
       isMessageShow: true,
       isSuccess: true,
