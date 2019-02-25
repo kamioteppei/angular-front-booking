@@ -10,7 +10,8 @@ import { AuthGuard } from './user/auth-guard.service';
 const routes: Routes = [
   { path: '', component: BookingComponent },
   { path: 'booking', component: BookingComponent },
-  { path: 'confirmation', canActivate: [AuthGuard], component: ConfirmationComponent },
+  // { path: 'confirmation', canActivate: [AuthGuard], component: ConfirmationComponent },
+  { path: 'confirmation',  component: ConfirmationComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'signup', component: SignupComponent },
 ];

@@ -23,17 +23,15 @@
   <h5 class="my-0 mr-md-auto font-weight-normal text-white "><a routerLink="/booking">Booking.niko</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <a routerLink="/confirmation" class="p-2 text-white" >予約確認</a>
-        <a routerLink="/history" class="p-2 text-white" >履歴</a>
-        <a routerLink="/account" class="p-2 text-white" >アカウント</a>
+        <a class="p-2 text-white" >履歴</a>
+        <a class="p-2 text-white" >アカウント</a>
     </nav>
     <a routerLink="/signin" class="btn btn-primary" >Sign in</a>
 </div>
 
 <div class="container">
-    <div class="row">
-      <div class="col-xs-12">
-        <router-outlet></router-outlet>
-      </div>
+    <div class="center-block col-xs-12">
+      <router-outlet></router-outlet>
     </div>
 </div>
 

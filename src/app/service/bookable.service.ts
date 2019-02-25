@@ -8,7 +8,7 @@ import { BookableData } from '../model/bookable-data.model';
 import { RequestQueryBuilder } from '../other/search-query-builder';
 import { IQueryParams } from '../other/query-params.interface';
 
-const SESSION_JWT_TOKEN:string = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWtvIiwiZXhwIjoxNTUxODc1NzAzfQ.mc-L9KoLhB84hyvTu4bsMmFlHXDN6ftaJ91G4v2qLvsgv54xSEHUSsof9WDK4FqoNbn2Z3nKja40p8qV2o-MuQ';
+// const SESSION_JWT_TOKEN:string = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWtvIiwiZXhwIjoxNTUxODc1NzAzfQ.mc-L9KoLhB84hyvTu4bsMmFlHXDN6ftaJ91G4v2qLvsgv54xSEHUSsof9WDK4FqoNbn2Z3nKja40p8qV2o-MuQ';
 const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
 
 @Injectable()
