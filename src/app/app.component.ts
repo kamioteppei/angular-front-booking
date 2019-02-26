@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './user/auth.service';
+import { User } from './user/user.model';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,7 @@ export class AppComponent implements OnInit {
         if (authenticated) {
           this.router.navigate(['/booking']);
         } else {
-          this.router.navigate(['/booking']);
+          this.router.navigate(['/']);
         }
       }
     );
@@ -30,5 +31,9 @@ export class AppComponent implements OnInit {
 
   onLogout() {
     this.authService.logout();
+  }
+
+  get user(): User {
+    return this.authService.getAuthenticatedUser();
   }
 }

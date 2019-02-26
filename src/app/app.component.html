@@ -22,11 +22,13 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-dark border-bottom box-shadow">
   <h5 class="my-0 mr-md-auto font-weight-normal text-white "><a routerLink="/booking">Booking.niko</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
+        <span *ngIf="isAuthenticated" class="p-2 text-white font-weight-normal">ログイン:<b>{{ user.username }}</b>さん</span>
         <a routerLink="/confirmation" class="p-2 text-white" >予約確認</a>
         <a class="p-2 text-white" >履歴</a>
         <a class="p-2 text-white" >アカウント</a>
+        <a *ngIf="isAuthenticated" href="" class="p-2 text-white" (click)="onLogout()">ログアウト</a>
     </nav>
-    <a routerLink="/signin" class="btn btn-primary" >Sign in</a>
+    <a *ngIf="!isAuthenticated" routerLink="/signin" class="btn btn-primary" >Sign in</a>
 </div>
 
 <div class="container">

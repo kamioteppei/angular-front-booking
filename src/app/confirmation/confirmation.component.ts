@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { BsAlertParams } from '../other/bs.alert.param';
 import { BookingService } from '../service/booking.service';
-import { BookableData } from '../model/bookable-data.model';
 import { BookingData } from '../model/booking-data.model';
-
+import { CustomerData } from '../model/customer-data.model';
+import { AuthService } from '../user/auth.service';
+import { User } from '../user/user.model';
 
 @Component({
   selector: 'app-confirmation',
@@ -17,10 +18,20 @@ export class ConfirmationComponent implements OnInit {
   didFail = false;
   bookingDataList: BookingData[] = [];
 
-  constructor(private route: ActivatedRoute
-    , private bookingService: BookingService) { }
+  constructor(private authService: AuthService
+            , private route: ActivatedRoute
+            , private bookingService: BookingService) { }
 
   ngOnInit() {
+
+    this.bookingService.dataLoaded.subscribe(
+      (list: BookingData[]) => {
+        this.bookingDataList = list;
+      }
+    );
+    this.bookingService.dataLoadFailed.subscribe(
+      (didFail: boolean) => this.didFail = didFail
+    );
 
     let params  = this.route.snapshot.queryParamMap
     console.log(params)
@@ -32,17 +43,15 @@ export class ConfirmationComponent implements OnInit {
       message: params.get('message')
     }
 
-    this.bookingService.onRetrieveData();
+    let customer: CustomerData = {
+      id : this.user.id,
+      name: this.user.username
+    }
+    this.bookingService.onRetrieveData(customer);
+  }
 
-    this.bookingService.dataLoaded.subscribe(
-      (list: BookingData[]) => {
-        this.bookingDataList = list;
-      }
-    );
-    this.bookingService.dataLoadFailed.subscribe(
-      (didFail: boolean) => this.didFail = didFail
-    );
-
+  get user(): User {
+    return this.authService.getAuthenticatedUser();
   }
 
 }

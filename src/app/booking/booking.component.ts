@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../user/auth.service';
 import { BookableService } from '../service/bookable.service';
 import { BookingService } from '../service/booking.service';
 import { BookableData } from '../model/bookable-data.model';
 import { BookingData } from '../model/booking-data.model';
 import { CustomerData } from '../model/customer-data.model';
+import { User } from '../user/user.model';
 import { RoomData } from '../model/room-data.model';
 import { SearchParams } from '../other/search.params';
 
@@ -21,7 +23,8 @@ export class BookingComponent implements OnInit {
   didFail = false;
   bookableDataList: BookableData[] = [];
 
-  constructor(private router: Router
+  constructor(private authService: AuthService
+            , private router: Router
             , private bookableService: BookableService
             , private bookingService: BookingService)  {
   }
@@ -63,8 +66,8 @@ export class BookingComponent implements OnInit {
     let dummyId = 0;
 
     let customer: CustomerData = {
-      id : 301,
-      name: 'niko'
+      id : this.user.id,
+      name: this.user.username
     }
 
     let dummyRoom: RoomData = {
@@ -83,13 +86,17 @@ export class BookingComponent implements OnInit {
     }
     this.bookingService.onStoreData(booking);
 
-    let bsAlertParams = {
-      isMessageShow: true,
-      isSuccess: true,
-      status: 'OK!',
-      message: 'Booking is completed.'
-    }
-    this.router.navigate(['/confirmation'], { queryParams: bsAlertParams });
+    // let bsAlertParams = {
+    //   isMessageShow: true,
+    //   isSuccess: true,
+    //   status: 'OK!',
+    //   message: 'Booking is completed.'
+    // }
+    // this.router.navigate(['/confirmation'], { queryParams: bsAlertParams });
+  }
+
+  get user(): User {
+    return this.authService.getAuthenticatedUser();
   }
 
 }

@@ -25,6 +25,7 @@ export class BookableService {
   onRetrieveData(queryParams:IQueryParams) {
     this.dataLoaded.next(null);
     this.dataLoadFailed.next(false);
+
     let rqb:RequestQueryBuilder= new RequestQueryBuilder(queryParams);
     let requestParams: string = rqb.toRequestParameter();
     console.log('call onRetrieveData...' + requestParams);

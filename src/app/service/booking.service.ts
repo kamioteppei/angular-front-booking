@@ -6,9 +6,9 @@ import 'rxjs/add/operator/map';
 
 import { BookingData } from '../model/booking-data.model';
 import { AuthService } from '../user/auth.service';
-import { Session } from 'protractor';
+import { CustomerData } from '../model/customer-data.model';
 
-const SESSION_JWT_TOKEN:string = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWtvIiwiZXhwIjoxNTUxODc1NzAzfQ.mc-L9KoLhB84hyvTu4bsMmFlHXDN6ftaJ91G4v2qLvsgv54xSEHUSsof9WDK4FqoNbn2Z3nKja40p8qV2o-MuQ';
+// const SESSION_JWT_TOKEN:string = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWtvIiwiZXhwIjoxNTUxODc1NzAzfQ.mc-L9KoLhB84hyvTu4bsMmFlHXDN6ftaJ91G4v2qLvsgv54xSEHUSsof9WDK4FqoNbn2Z3nKja40p8qV2o-MuQ';
 const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
 
 @Injectable()
@@ -25,55 +25,59 @@ export class BookingService {
   }
 
   onStoreData(bookingData: BookingData) {
+
+    if (!this.authService.isAuthenticated) {
+      return;
+    }
+
     this.dataLoadFailed.next(false);
     this.dataIsLoading.next(true);
     this.dataEdited.next(false);
-    // this.bookingData = bookingData;
-    // this.authService.getAuthenticatedUser().getSession((err, session) => {
-    //   if (err) {
-    //     return;
-    //   }
-      let customerId: number = bookingData.customer.id;
-      this.http.post(API_ENTRY_POINT_URL + 'customers/' + customerId + '/bookings/', bookingData, {
-        headers: new Headers({'Authorization': SESSION_JWT_TOKEN})
-      })
-        .subscribe(
-          (result) => {
-            this.dataLoadFailed.next(false);
-            this.dataIsLoading.next(false);
-            this.dataEdited.next(true);
-          },
-          (error) => {
-            this.dataIsLoading.next(false);
-            this.dataLoadFailed.next(true);
-            this.dataEdited.next(false);
-          }
-        );
-    // });
+
+    let customerId: number = bookingData.customer.id;
+    this.http.post(API_ENTRY_POINT_URL + 'customers/' + customerId + '/bookings/', bookingData, {
+      headers: new Headers({'Authorization': this.authService.token })
+    })
+      .subscribe(
+        (result) => {
+          this.dataLoadFailed.next(false);
+          this.dataIsLoading.next(false);
+          this.dataEdited.next(true);
+        },
+        (error) => {
+          this.dataIsLoading.next(false);
+          this.dataLoadFailed.next(true);
+          this.dataEdited.next(false);
+        }
+      );
   }
 
-  onRetrieveData() {
+  onRetrieveData(customerData:CustomerData) {
+
+    if (!this.authService.isAuthenticated) {
+      return;
+    }
+
     this.dataLoaded.next(null);
     this.dataLoadFailed.next(false);
-    // this.authService.getAuthenticatedUser().getSession((err, session) => {
-      console.log('call onRetrieveData...')
-      this.http.get(API_ENTRY_POINT_URL + 'customers/301/bookings/', {
-        headers: new Headers({'Authorization': SESSION_JWT_TOKEN})
-      })
-        .map(
-          (response: Response) => response.json()
-        )
-        .subscribe(
-          (data) => {
-              console.log(data);
-              this.dataLoaded.next(data);
-          },
-          (error) => {
-            this.dataLoadFailed.next(true);
-            this.dataLoaded.next(null);
-          }
-        );
-    // });
+
+    console.log('call onRetrieveData...')
+    this.http.get(API_ENTRY_POINT_URL + 'customers/' + customerData.id +'/bookings/', {
+      headers: new Headers({'Authorization': this.authService.token})
+    })
+      .map(
+        (response: Response) => response.json()
+      )
+      .subscribe(
+        (data: BookingData[]) => {
+            console.log(data);
+            this.dataLoaded.next(data);
+        },
+        (error) => {
+          this.dataLoadFailed.next(true);
+          this.dataLoaded.next(null);
+        }
+      );
   }
 
 }

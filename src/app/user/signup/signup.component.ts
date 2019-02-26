@@ -8,9 +8,9 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  @ViewChild('usrForm') form: NgForm;
   didFail = false;
   isLoading = false;
-  @ViewChild('usrForm') form: NgForm;
 
   constructor(private authService: AuthService) {
   }
@@ -28,6 +28,7 @@ export class SignupComponent implements OnInit {
     const usrName = this.form.value.username;
     const password = this.form.value.password;
     this.authService.signUp(usrName, password);
+    // this.authService.signIn(usrName, password);
   }
 
 }
