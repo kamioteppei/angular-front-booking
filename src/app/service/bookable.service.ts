@@ -13,7 +13,6 @@ const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
 
 @Injectable()
 export class BookableService {
-  dataEdited = new BehaviorSubject<boolean>(false);
   dataIsLoading = new BehaviorSubject<boolean>(false);
   dataLoaded = new Subject<BookableData[]>();
   dataLoadFailed = new Subject<boolean>();

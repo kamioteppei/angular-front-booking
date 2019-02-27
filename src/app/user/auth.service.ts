@@ -7,8 +7,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { User } from './user.model';
 import { IQueryParams } from '../other/query-params.interface';
 import { RequestQueryBuilder } from '../other/search-query-builder';
+import { CustomerData } from '../model/customer-data.model';
 
 const API_USER_AUTH_ENTRY_POINT_URL:string = 'http://localhost:8080/'
+const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
 const API_USER_AUTH_SESSION_JWT:string = 'Spring.Api.Booking.Session.JWT'
 
 @Injectable()
@@ -16,11 +18,17 @@ export class AuthService {
 
   authIsLoading = new BehaviorSubject<boolean>(false);
   authDidFail = new BehaviorSubject<boolean>(false);
-  authStatusChanged = new Subject<boolean>();
+  isAuthenticated = new Subject<boolean>();
   authenticatedUser:User;
 
   constructor(private router: Router
             , private http: Http) {
+  }
+
+  initAuth() {
+    this.authenticattionObserver().subscribe(
+      (auth:boolean) => this.isAuthenticated.next(auth)
+    );
   }
 
   signUp(username: string, password: string): void {
@@ -37,14 +45,9 @@ export class AuthService {
     this.http.post(API_USER_AUTH_ENTRY_POINT_URL + 'users/sign-up' , signupUser, {
       headers: new Headers({'Content-Type': 'application/json'})
     })
-    .map(
-      (response: Response) => response.json()
-    )
     .subscribe(
-        (data:User) => {
-          console.log('signup success');
-          this.authenticatedUser = data;
-
+        (response: Response) => {
+          console.log('signup success' + JSON.stringify(response));
           this.authDidFail.next(false);
           this.authIsLoading.next(false);
         },
@@ -54,7 +57,8 @@ export class AuthService {
           this.authIsLoading.next(false);
           }
       );
-    return;
+      this.isAuthenticated.next(false);
+      return;
   }
 
   signIn(username: string, password: string): void {
@@ -78,46 +82,73 @@ export class AuthService {
 
           this.storeTokenToLocal(result.headers.get('Authorization'));
 
-          this.authDidFail.next(false);
-          this.authIsLoading.next(false);
+
+          console.log('call getCustomerByName...')
+          this.http.get(API_ENTRY_POINT_URL + 'customers/' + username, {
+            headers: new Headers({'Authorization': this.token})
+          })
+            .map(
+              (response: Response) => response.json()
+            )
+            .subscribe(
+              (customer: CustomerData) => {
+                  console.log('getCustomer success ->' + customer);
+                  this.authenticatedUser = {
+                    id: customer.id,
+                    username: customer.name,
+                    password: null
+                  }
+                  this.authDidFail.next(false);
+                  this.authIsLoading.next(false);
+                  this.isAuthenticated.next(true);
+
+              },
+              (error) => {
+                console.log('getCustomer error' + JSON.stringify(error));
+                this.authDidFail.next(true);
+                this.authIsLoading.next(false);
+                this.isAuthenticated.next(false);
+              }
+            );
         },
         (error) => {
           console.log('signin error' + JSON.stringify(error));
 
           this.authDidFail.next(true);
           this.authIsLoading.next(false);
-          }
+          this.isAuthenticated.next(false);
+        }
       );
-    this.authStatusChanged.next(true);
     return;
   }
 
   logout() {
     this.disposeTokenFromLocal();
     this.authenticatedUser = null;
-    this.authStatusChanged.next(false);
+    this.isAuthenticated.next(false);
   }
 
-  isAuthenticated(): Observable<boolean> {
+  authenticattionObserver(): Observable<boolean> {
     const obs = Observable.create((observer) => {
+      console.log('call isAuthenticated Observable')
+
       if (!this.getAuthenticatedUser()) {
+        console.log('call isAuthenticated user is null')
+        this.logout();
         observer.next(false);
       } else {
         if (this.isLoggedIn()) {
+          console.log('call isAuthenticated isLoggedIn')
           observer.next(true);
         } else {
+          console.log('call isAuthenticated isLoggedOut')
+          this.logout();
           observer.next(false);
         }
       }
       observer.complete();
     });
     return obs;
-  }
-
-  initAuth() {
-    this.isAuthenticated().subscribe(
-      (auth) => this.authStatusChanged.next(auth)
-    );
   }
 
   // トークンがあり、有効期限が切れていなければログイン状態とみなす

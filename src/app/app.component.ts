@@ -16,8 +16,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.authStatusChanged.subscribe(
+    this.authService.isAuthenticated.subscribe(
       (authenticated) => {
+        console.log('authService.authStatusChanged->' + authenticated);
         this.isAuthenticated = authenticated;
         if (authenticated) {
           this.router.navigate(['/booking']);

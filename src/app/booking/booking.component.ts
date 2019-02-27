@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild  } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AuthService } from '../user/auth.service';
 import { BookableService } from '../service/bookable.service';
 import { BookingService } from '../service/booking.service';
@@ -21,6 +22,7 @@ export class BookingComponent implements OnInit {
   @ViewChild('searchForm') form: NgForm;
 
   didFail = false;
+  dataEdited = new BehaviorSubject<boolean>(false);
   bookableDataList: BookableData[] = [];
 
   constructor(private authService: AuthService
@@ -84,15 +86,29 @@ export class BookingComponent implements OnInit {
       outDate: bookableData.dtTo,
       canceled: false,
     }
+
+    this.bookingService.dataEdited.subscribe(
+      (result) => {
+        let bsAlertParams = {
+          isMessageShow: true,
+          isSuccess: true,
+          status: 'OK!',
+          message: 'Booking is completed.'
+        }
+        this.router.navigate(['/confirmation'], { queryParams: bsAlertParams });
+      },
+      (error) => {
+        let bsAlertParams = {
+          isMessageShow: true,
+          isSuccess: false,
+          status: 'ERROR!',
+          message: 'Booking is not completed.'
+        }
+        this.router.navigate(['/confirmation'], { queryParams: bsAlertParams });
+      }
+    );
     this.bookingService.onStoreData(booking);
 
-    // let bsAlertParams = {
-    //   isMessageShow: true,
-    //   isSuccess: true,
-    //   status: 'OK!',
-    //   message: 'Booking is completed.'
-    // }
-    // this.router.navigate(['/confirmation'], { queryParams: bsAlertParams });
   }
 
   get user(): User {
