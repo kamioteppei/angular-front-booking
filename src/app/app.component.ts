@@ -21,13 +21,6 @@ export class AppComponent implements OnInit {
       (authenticated) => {
         console.log('authService.authStatusChanged->' + authenticated);
         this.isAuthenticated = authenticated;
-        // ログイン画面でエラーになった場合に、ログイン画面で、
-        // エラー内容を表示したいので、ここはコメントアウトする
-        // if (authenticated) {
-        //   this.router.navigate(['/booking']);
-        // } else {
-        //   this.router.navigate(['/']);
-        // }
       }
     );
     this.authService.initAuth();
