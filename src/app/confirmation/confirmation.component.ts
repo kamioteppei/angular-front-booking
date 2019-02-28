@@ -24,6 +24,10 @@ export class ConfirmationComponent implements OnInit {
 
   ngOnInit() {
 
+    if (!this.authService.isAuthenticated) {
+      return;
+    }
+
     this.bookingService.dataLoaded.subscribe(
       (list: BookingData[]) => {
         this.bookingDataList = list;

@@ -43,6 +43,7 @@ export class BookingComponent implements OnInit {
   }
 
   onSubmit() {
+
     console.log(this.form.value.dtFrom)
     console.log(this.form.value.dtTo)
 
@@ -62,6 +63,10 @@ export class BookingComponent implements OnInit {
   }
 
   onPostBookingData(bookableData: BookableData) {
+
+    if (!this.authService.isAuthenticated) {
+      return;
+    }
 
     console.log(bookableData)
 

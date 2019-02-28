@@ -17,7 +17,8 @@ export class AuthService {
 
   authIsLoading = new BehaviorSubject<boolean>(false);
   authDidFail = new Subject<boolean>();
-  isAuthenticated = new Subject<boolean>();
+  // isAuthenticated = new Subject<boolean>();
+  isAuthenticated: boolean;
   authenticatedUser:User;
 
   constructor(private router: Router
@@ -28,7 +29,9 @@ export class AuthService {
     this.authenticattionObservable().subscribe(
       (auth:boolean) => {
         console.log('this.authenticattionObserver -> ' + auth )
-        this.isAuthenticated.next(auth);
+        if (!auth){
+          this.logout;
+        }
     });
   }
 
@@ -54,9 +57,9 @@ export class AuthService {
           console.log('signup error' + JSON.stringify(error));
           this.authDidFail.next(true);
           this.authIsLoading.next(false);
-          }
+          this.logout;
+        }
       );
-      this.isAuthenticated.next(false);
       return;
   }
 
@@ -77,30 +80,55 @@ export class AuthService {
       .subscribe(
         (result: Response) => {
           console.log('signin success' + JSON.stringify(result));
-          this.storeTokenToLocal(result.headers.get('Authorization'));
+          const token = result.headers.get('Authorization');
 
           console.log('call getCustomerByName...')
           this.http.get(API_ENTRY_POINT_URL + 'customers/' + username, {
-            headers: new Headers({'Authorization': this.token})
+            headers: new Headers({'Authorization': token})
           })
-          .map((response: Response) => response.json())
-          .subscribe(this.onGetCustomerResponsObserver);
+          .map(
+            (response: Response) => response.json()
+          )
+          .subscribe(
+              (customer: CustomerData) => {
+                console.log('getCustomer success ->' + customer);
+                const authenticatedUser = {
+                  id: customer.id,
+                  username: customer.name,
+                  password: null
+                }
+                this.authDidFail.next(false);
+                this.authIsLoading.next(false);
+                this.login(authenticatedUser, token)
+              },
+              (error) => {
+                console.log('getCustomer error' + JSON.stringify(error));
+                this.authDidFail.next(true);
+                this.authIsLoading.next(false);
+                this.logout
+              }
+          );
         },
         (error) => {
           console.log('signin error' + JSON.stringify(error));
-
           this.authDidFail.next(true);
           this.authIsLoading.next(false);
-          this.isAuthenticated.next(false);
+          this.logout;
         }
       );
     return;
   }
 
+  login(user:User, token:string) {
+    this.authenticatedUser = user;
+    this.storeTokenToLocal(token);
+    this.isAuthenticated = true;
+  }
+
   logout() {
-    this.disposeTokenFromLocal();
     this.authenticatedUser = null;
-    this.isAuthenticated.next(false);
+    this.disposeTokenFromLocal();
+    this.isAuthenticated = false;
   }
 
   authenticattionObservable(): Observable<boolean> {
@@ -126,25 +154,25 @@ export class AuthService {
     return obs;
   }
 
-  onGetCustomerResponsObserver = {
-    next: (customer: CustomerData) => {
-      console.log('getCustomer success ->' + customer);
-      this.authenticatedUser = {
-        id: customer.id,
-        username: customer.name,
-        password: null
-      }
-      this.authDidFail.next(false);
-      this.authIsLoading.next(false);
-      this.isAuthenticated.next(true);
-    },
-    error: (error) => {
-      console.log('getCustomer error' + JSON.stringify(error));
-      this.authDidFail.next(true);
-      this.authIsLoading.next(false);
-      this.isAuthenticated.next(false);
-    }
-  }
+  // onGetCustomerResponsObserver = {
+  //   next: (customer: CustomerData) => {
+  //     console.log('getCustomer success ->' + customer);
+  //     this.authenticatedUser = {
+  //       id: customer.id,
+  //       username: customer.name,
+  //       password: null
+  //     }
+  //     this.authDidFail.next(false);
+  //     this.authIsLoading.next(false);
+  //     this.isAuthenticated.next(true);
+  //   },
+  //   error: (error) => {
+  //     console.log('getCustomer error' + JSON.stringify(error));
+  //     this.authDidFail.next(true);
+  //     this.authIsLoading.next(false);
+  //     this.isAuthenticated.next(false);
+  //   }
+  // }
 
   // トークンがあり、有効期限が切れていなければログイン状態とみなす
   isLoggedIn(): boolean {
