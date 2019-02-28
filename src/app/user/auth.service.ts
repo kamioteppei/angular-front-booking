@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Http, Headers, Response } from '@angular/http';
 import { Subject } from 'rxjs/Subject';
+import { Subscriber } from 'rxjs/Subscriber';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { User } from './user.model';
-import { IQueryParams } from '../other/query-params.interface';
-import { RequestQueryBuilder } from '../other/search-query-builder';
 import { CustomerData } from '../model/customer-data.model';
 
 const API_USER_AUTH_ENTRY_POINT_URL:string = 'http://localhost:8080/'
@@ -26,7 +25,7 @@ export class AuthService {
   }
 
   initAuth() {
-    this.authenticattionObserver().subscribe(
+    this.authenticattionObservable().subscribe(
       (auth:boolean) => {
         console.log('this.authenticattionObserver -> ' + auth )
         this.isAuthenticated.next(auth);
@@ -34,7 +33,6 @@ export class AuthService {
   }
 
   signUp(username: string, password: string): void {
-    this.authDidFail.next(false);
     this.authIsLoading.next(true);
 
     const signupUser = {
@@ -50,8 +48,7 @@ export class AuthService {
     .subscribe(
         (response: Response) => {
           console.log('signup success' + JSON.stringify(response));
-          this.authDidFail.next(false);
-          this.authIsLoading.next(false);
+          this.signIn(username, password);
         },
         (error) => {
           console.log('signup error' + JSON.stringify(error));
@@ -64,7 +61,6 @@ export class AuthService {
   }
 
   signIn(username: string, password: string): void {
-    // this.authDidFail.next(false);
     this.authIsLoading.next(true);
 
     const signinUser = {
@@ -87,29 +83,8 @@ export class AuthService {
           this.http.get(API_ENTRY_POINT_URL + 'customers/' + username, {
             headers: new Headers({'Authorization': this.token})
           })
-            .map(
-              (response: Response) => response.json()
-            )
-            .subscribe(
-              (customer: CustomerData) => {
-                  console.log('getCustomer success ->' + customer);
-                  this.authenticatedUser = {
-                    id: customer.id,
-                    username: customer.name,
-                    password: null
-                  }
-                  this.authDidFail.next(false);
-                  this.authIsLoading.next(false);
-                  this.isAuthenticated.next(true);
-
-              },
-              (error) => {
-                console.log('getCustomer error' + JSON.stringify(error));
-                this.authDidFail.next(true);
-                this.authIsLoading.next(false);
-                this.isAuthenticated.next(false);
-              }
-            );
+          .map((response: Response) => response.json())
+          .subscribe(this.onGetCustomerResponsObserver);
         },
         (error) => {
           console.log('signin error' + JSON.stringify(error));
@@ -128,7 +103,7 @@ export class AuthService {
     this.isAuthenticated.next(false);
   }
 
-  authenticattionObserver(): Observable<boolean> {
+  authenticattionObservable(): Observable<boolean> {
     const obs = Observable.create((observer) => {
       console.log('call isAuthenticated Observable')
 
@@ -149,6 +124,26 @@ export class AuthService {
       observer.complete();
     });
     return obs;
+  }
+
+  onGetCustomerResponsObserver = {
+    next: (customer: CustomerData) => {
+      console.log('getCustomer success ->' + customer);
+      this.authenticatedUser = {
+        id: customer.id,
+        username: customer.name,
+        password: null
+      }
+      this.authDidFail.next(false);
+      this.authIsLoading.next(false);
+      this.isAuthenticated.next(true);
+    },
+    error: (error) => {
+      console.log('getCustomer error' + JSON.stringify(error));
+      this.authDidFail.next(true);
+      this.authIsLoading.next(false);
+      this.isAuthenticated.next(false);
+    }
   }
 
   // トークンがあり、有効期限が切れていなければログイン状態とみなす
