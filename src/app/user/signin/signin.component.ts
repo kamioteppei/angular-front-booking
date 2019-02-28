@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { AuthService } from '../auth.service';
+import { BsAlertParams } from '../../other/bs.alert.param';
 
 @Component({
   selector: 'app-signin',
@@ -9,9 +11,12 @@ import { NgForm } from '@angular/forms';
 })
 export class SigninComponent implements OnInit {
   @ViewChild('usrForm') form: NgForm;
+  bsAlertParams:BsAlertParams = new BsAlertParams;
   didFail = false;
   isLoading = false;
-  constructor(private authService: AuthService) {
+
+  constructor(private authService: AuthService
+            , private router: Router) {
   }
 
   ngOnInit() {
@@ -19,8 +24,22 @@ export class SigninComponent implements OnInit {
       (isLoading: boolean) => this.isLoading = isLoading
     );
     this.authService.authDidFail.subscribe(
-      (didFail: boolean) => this.didFail = didFail
-    );
+      (didFail: boolean) => {
+        this.didFail = didFail
+        if(didFail){
+          console.log('signin didFail -> ' + didFail);
+          let bsAlertParams:BsAlertParams = {
+            isMessageShow: true,
+            isSuccess: false,
+            status: 'Error',
+            message: 'ログイン情報が正しくありません。'
+          }
+          this.bsAlertParams = bsAlertParams;
+        } else {
+          console.log('signin navigate to booking')
+          this.router.navigate(['/booking']);
+        }
+    });
   }
 
   onSubmit() {

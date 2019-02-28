@@ -17,7 +17,7 @@ const API_USER_AUTH_SESSION_JWT:string = 'Spring.Api.Booking.Session.JWT'
 export class AuthService {
 
   authIsLoading = new BehaviorSubject<boolean>(false);
-  authDidFail = new BehaviorSubject<boolean>(false);
+  authDidFail = new Subject<boolean>();
   isAuthenticated = new Subject<boolean>();
   authenticatedUser:User;
 
@@ -27,8 +27,10 @@ export class AuthService {
 
   initAuth() {
     this.authenticattionObserver().subscribe(
-      (auth:boolean) => this.isAuthenticated.next(auth)
-    );
+      (auth:boolean) => {
+        console.log('this.authenticattionObserver -> ' + auth )
+        this.isAuthenticated.next(auth);
+    });
   }
 
   signUp(username: string, password: string): void {
@@ -62,7 +64,7 @@ export class AuthService {
   }
 
   signIn(username: string, password: string): void {
-    this.authDidFail.next(false);
+    // this.authDidFail.next(false);
     this.authIsLoading.next(true);
 
     const signinUser = {
@@ -79,9 +81,7 @@ export class AuthService {
       .subscribe(
         (result: Response) => {
           console.log('signin success' + JSON.stringify(result));
-
           this.storeTokenToLocal(result.headers.get('Authorization'));
-
 
           console.log('call getCustomerByName...')
           this.http.get(API_ENTRY_POINT_URL + 'customers/' + username, {

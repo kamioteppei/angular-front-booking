@@ -16,15 +16,18 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.authService.isAuthenticated.subscribe(
       (authenticated) => {
         console.log('authService.authStatusChanged->' + authenticated);
         this.isAuthenticated = authenticated;
-        if (authenticated) {
-          this.router.navigate(['/booking']);
-        } else {
-          this.router.navigate(['/']);
-        }
+        // ログイン画面でエラーになった場合に、ログイン画面で、
+        // エラー内容を表示したいので、ここはコメントアウトする
+        // if (authenticated) {
+        //   this.router.navigate(['/booking']);
+        // } else {
+        //   this.router.navigate(['/']);
+        // }
       }
     );
     this.authService.initAuth();
