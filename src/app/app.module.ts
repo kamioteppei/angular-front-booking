@@ -13,6 +13,7 @@ import { BookingComponent } from './booking/booking.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
 import { BookableService } from './service/bookable.service';
 import { BookingService } from './service/booking.service';
+import { AccountComponent } from './account/account.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { BookingService } from './service/booking.service';
     SigninComponent,
     BookingComponent,
     ConfirmationComponent,
+    AccountComponent,
   ],
   imports: [
     BrowserModule,

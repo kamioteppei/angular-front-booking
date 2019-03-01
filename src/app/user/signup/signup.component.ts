@@ -20,6 +20,11 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (this.authService.isAuthenticated) {
+      return;
+    }
+
     this.authService.authIsLoading.subscribe(
       (isLoading: boolean) => this.isLoading = isLoading
     );
@@ -37,7 +42,11 @@ export class SignupComponent implements OnInit {
           this.bsAlertParams = bsAlertParams;
         } else {
           console.log('signin navigate to booking')
-          this.router.navigate(['/booking']);
+          if(this.authService.pathTo){
+            this.router.navigate([this.authService.pathTo]);
+          } else {
+            this.router.navigate(['/booking']);
+          }
         }
     });
   }

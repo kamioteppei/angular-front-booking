@@ -12,7 +12,7 @@ import { BsAlertParams } from '../../other/bs.alert.param';
 export class SigninComponent implements OnInit {
   @ViewChild('usrForm') form: NgForm;
   bsAlertParams:BsAlertParams = new BsAlertParams;
-  didFail = false;
+  // didFail = false;
   isLoading = false;
 
   constructor(private authService: AuthService
@@ -20,12 +20,17 @@ export class SigninComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    if (this.authService.isAuthenticated) {
+      return;
+    }
+
     this.authService.authIsLoading.subscribe(
       (isLoading: boolean) => this.isLoading = isLoading
     );
     this.authService.authDidFail.subscribe(
       (didFail: boolean) => {
-        this.didFail = didFail
+        // this.didFail = didFail
         if(didFail){
           console.log('signin didFail -> ' + didFail);
           let bsAlertParams:BsAlertParams = {
@@ -36,7 +41,7 @@ export class SigninComponent implements OnInit {
           }
           this.bsAlertParams = bsAlertParams;
         } else {
-          console.log('signin navigate to booking')
+          console.log('signin navigate to booking:pathTo -> ' + this.authService.pathTo)
           if(this.authService.pathTo){
             this.router.navigate([this.authService.pathTo]);
           } else {

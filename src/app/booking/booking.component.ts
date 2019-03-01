@@ -35,13 +35,9 @@ export class BookingComponent implements OnInit {
         this.bookableDataList = list;
       }
     );
-    // this.bookableService.dataLoadFailed.subscribe(
-    //   (didFail: boolean) => this.didFail = didFail
-    // );
     if (this.authService.pathFrom == '/booking'){
       const bookableData = this.bookingService.bookableData;
-      this.authService.pathFrom = null;
-      this.authService.pathTo = null;
+      this.authService.pathThroughAuth(null, null);
       this.callBookingService(this.bookingService.bookableData);
     }
   }
@@ -49,7 +45,6 @@ export class BookingComponent implements OnInit {
   onGetBookableData() {
     // console.log(this.form.value.dtFrom)
     // console.log(this.form.value.dtTo)
-
     let searchParams: SearchParams = {
       dtFrom: this.form.value.dtFrom as Date,
       dtTo: this.form.value.dtTo as Date,
@@ -66,15 +61,12 @@ export class BookingComponent implements OnInit {
   }
 
   onPostBookingData(bookableData: BookableData) {
-
     console.log(bookableData)
-
     if (this.authService.isAuthenticated) {
       this.callBookingService(bookableData);
     } else {
       this.bookingService.bookableData = bookableData;
-      this.authService.pathFrom = '/booking';
-      this.authService.pathTo = '/booking';
+      this.authService.pathThroughAuth('/booking', '/booking');
       this.router.navigate(['/signin']);
     }
   }

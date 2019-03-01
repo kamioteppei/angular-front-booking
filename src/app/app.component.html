@@ -24,8 +24,7 @@
     <nav class="my-2 my-md-0 mr-md-3">
         <span class="p-2 text-white font-weight-normal">ログイン:<b>{{ isAuthenticated ? user.username:'ゲスト' }}</b>さん</span>
         <a routerLink="/confirmation" class="p-2 text-white" >予約確認</a>
-        <a class="p-2 text-white" >履歴</a>
-        <a class="p-2 text-white" >アカウント</a>
+        <a routerLink="/account" class="p-2 text-white" >アカウント</a>
         <a *ngIf="isAuthenticated" href="" class="p-2 text-white" (click)="onLogout()">ログアウト</a>
     </nav>
     <a *ngIf="!isAuthenticated" routerLink="/signin" class="btn btn-primary" >Sign in</a>

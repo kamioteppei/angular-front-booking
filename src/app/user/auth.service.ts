@@ -18,12 +18,20 @@ export class AuthService {
   authIsLoading = new Subject<boolean>();
   authDidFail = new Subject<boolean>();
   // isAuthenticated = new Subject<boolean>();
-  isAuthenticated: boolean;
-  authenticatedUser:User;
+  private _isAuthenticated: boolean;
+  private authenticatedUser:User;
+  private _pathFrom:string;
+  private _pathTo:string;
 
-  pathFrom:string;
-  pathTo:string;
-
+  get isAuthenticated(){
+    return this._isAuthenticated;
+  }
+  get pathFrom(){
+    return this._pathFrom;
+  }
+  get pathTo(){
+    return this._pathTo;
+  }
 
   constructor(private router: Router
             , private http: Http) {
@@ -126,13 +134,13 @@ export class AuthService {
   login(user:User, token:string) {
     this.authenticatedUser = user;
     this.storeTokenToLocal(token);
-    this.isAuthenticated = true;
+    this._isAuthenticated = true;
   }
 
   logout() {
     this.authenticatedUser = null;
     this.disposeTokenFromLocal();
-    this.isAuthenticated = false;
+    this._isAuthenticated = false;
   }
 
   authenticattionObservable(): Observable<boolean> {
@@ -194,6 +202,14 @@ export class AuthService {
       const expireSec = payLoad.exp;
       return expireSec < new Date().getTime() / 1000;
     }
+  }
+
+  pathThroughAuth(pathFrom:string, pathTo:string){
+    this._pathFrom = null;
+    this._pathTo = null;
+
+    this._pathFrom = pathFrom;
+    this._pathTo = pathTo;
   }
 
   getAuthenticatedUser() {
