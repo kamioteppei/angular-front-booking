@@ -15,11 +15,15 @@ const API_USER_AUTH_SESSION_JWT:string = 'Spring.Api.Booking.Session.JWT'
 @Injectable()
 export class AuthService {
 
-  authIsLoading = new BehaviorSubject<boolean>(false);
+  authIsLoading = new Subject<boolean>();
   authDidFail = new Subject<boolean>();
   // isAuthenticated = new Subject<boolean>();
   isAuthenticated: boolean;
   authenticatedUser:User;
+
+  pathFrom:string;
+  pathTo:string;
+
 
   constructor(private router: Router
             , private http: Http) {
@@ -154,6 +158,8 @@ export class AuthService {
     return obs;
   }
 
+  // Observerの外だしサンプルとしてコメントアウト状態で残す
+  // 外だししても、上位の変数の参照ができなくなるので、やめた
   // onGetCustomerResponsObserver = {
   //   next: (customer: CustomerData) => {
   //     console.log('getCustomer success ->' + customer);

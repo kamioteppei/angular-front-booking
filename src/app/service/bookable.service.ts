@@ -8,12 +8,11 @@ import { BookableData } from '../model/bookable-data.model';
 import { RequestQueryBuilder } from '../other/search-query-builder';
 import { IQueryParams } from '../other/query-params.interface';
 
-// const SESSION_JWT_TOKEN:string = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaWtvIiwiZXhwIjoxNTUxODc1NzAzfQ.mc-L9KoLhB84hyvTu4bsMmFlHXDN6ftaJ91G4v2qLvsgv54xSEHUSsof9WDK4FqoNbn2Z3nKja40p8qV2o-MuQ';
 const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
 
 @Injectable()
 export class BookableService {
-  dataIsLoading = new BehaviorSubject<boolean>(false);
+  dataIsLoading = new Subject<boolean>();
   dataLoaded = new Subject<BookableData[]>();
   dataLoadFailed = new Subject<boolean>();
   bookableDataList:BookableData[];
@@ -22,7 +21,7 @@ export class BookableService {
   }
 
   onRetrieveData(queryParams:IQueryParams) {
-    this.dataLoaded.next(null);
+    this.dataLoaded.next([]);
     this.dataLoadFailed.next(false);
 
     let rqb:RequestQueryBuilder= new RequestQueryBuilder(queryParams);
@@ -40,10 +39,12 @@ export class BookableService {
             console.log(data);
             this.bookableDataList = data;
             this.dataLoaded.next(data);
-        },
+            this.dataLoadFailed.next(false);
+          },
         (error) => {
+          this.bookableDataList = [];
+          this.dataLoaded.next([]);
           this.dataLoadFailed.next(true);
-          this.dataLoaded.next(null);
         }
       );
   }

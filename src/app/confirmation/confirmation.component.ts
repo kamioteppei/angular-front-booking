@@ -30,6 +30,7 @@ export class ConfirmationComponent implements OnInit {
 
     this.bookingService.dataLoaded.subscribe(
       (list: BookingData[]) => {
+        console.log('ConfirmationComponent.ngOnInit' +  list);
         this.bookingDataList = list;
       }
     );

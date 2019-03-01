@@ -11,8 +11,8 @@ import { ImmutableAuthGuard } from './guard/immutable-auth-guard';
 const routes: Routes = [
   { path: '', component: BookingComponent },
   { path: 'booking', redirectTo: '', component: BookingComponent , pathMatch: 'full'},
-  // { path: 'confirmation',  component: ConfirmationComponent , pathMatch: 'full'},
-  { path: 'confirmation', canActivate: [AuthGuard], component: ConfirmationComponent },
+  { path: 'confirmation',  component: ConfirmationComponent , pathMatch: 'full'},
+  // { path: 'confirmation', canActivate: [AuthGuard], component: ConfirmationComponent },
   { path: 'signin', canActivate: [ImmutableAuthGuard], component: SigninComponent , pathMatch: 'full'},
   { path: 'signup', canActivate: [ImmutableAuthGuard], component: SignupComponent , pathMatch: 'full'},
   { path: '**', redirectTo: '', },

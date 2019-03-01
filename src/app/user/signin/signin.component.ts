@@ -37,7 +37,11 @@ export class SigninComponent implements OnInit {
           this.bsAlertParams = bsAlertParams;
         } else {
           console.log('signin navigate to booking')
-          this.router.navigate(['/booking']);
+          if(this.authService.pathTo){
+            this.router.navigate([this.authService.pathTo]);
+          } else {
+            this.router.navigate(['/booking']);
+          }
         }
     });
   }

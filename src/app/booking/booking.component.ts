@@ -21,8 +21,6 @@ export class BookingComponent implements OnInit {
 
   @ViewChild('searchForm') form: NgForm;
 
-  didFail = false;
-  dataEdited = new BehaviorSubject<boolean>(false);
   bookableDataList: BookableData[] = [];
 
   constructor(private authService: AuthService
@@ -37,15 +35,20 @@ export class BookingComponent implements OnInit {
         this.bookableDataList = list;
       }
     );
-    this.bookableService.dataLoadFailed.subscribe(
-      (didFail: boolean) => this.didFail = didFail
-    );
+    // this.bookableService.dataLoadFailed.subscribe(
+    //   (didFail: boolean) => this.didFail = didFail
+    // );
+    if (this.authService.pathFrom == '/booking'){
+      const bookableData = this.bookingService.bookableData;
+      this.authService.pathFrom = null;
+      this.authService.pathTo = null;
+      this.callBookingService(this.bookingService.bookableData);
+    }
   }
 
-  onSubmit() {
-
-    console.log(this.form.value.dtFrom)
-    console.log(this.form.value.dtTo)
+  onGetBookableData() {
+    // console.log(this.form.value.dtFrom)
+    // console.log(this.form.value.dtTo)
 
     let searchParams: SearchParams = {
       dtFrom: this.form.value.dtFrom as Date,
@@ -64,25 +67,30 @@ export class BookingComponent implements OnInit {
 
   onPostBookingData(bookableData: BookableData) {
 
-    if (!this.authService.isAuthenticated) {
-      return;
-    }
-
     console.log(bookableData)
 
-    let dummyId = 0;
+    if (this.authService.isAuthenticated) {
+      this.callBookingService(bookableData);
+    } else {
+      this.bookingService.bookableData = bookableData;
+      this.authService.pathFrom = '/booking';
+      this.authService.pathTo = '/booking';
+      this.router.navigate(['/signin']);
+    }
+  }
 
+  callBookingService(bookableData:BookableData) {
+
+    let dummyId = 0;
     let customer: CustomerData = {
       id : this.user.id,
       name: this.user.username
     }
-
     let dummyRoom: RoomData = {
       id: 0,
       name: 'dummy'
     }
-
-    let booking: BookingData = {
+    let bookingData: BookingData = {
       id: dummyId,
       customer: customer,
       hotel: bookableData.hotel,
@@ -112,8 +120,7 @@ export class BookingComponent implements OnInit {
         this.router.navigate(['/confirmation'], { queryParams: bsAlertParams });
       }
     );
-    this.bookingService.onStoreData(booking);
-
+    this.bookingService.onStoreData(bookingData);
   }
 
   get user(): User {
