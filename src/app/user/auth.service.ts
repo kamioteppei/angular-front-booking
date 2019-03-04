@@ -7,10 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { User } from './user.model';
 import { CustomerData } from '../model/customer-data.model';
-
-const API_USER_AUTH_ENTRY_POINT_URL:string = 'http://localhost:8080/'
-const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
-const API_USER_AUTH_SESSION_JWT:string = 'Spring.Api.Booking.Session.JWT'
+import * as constant from '../app-constant';
 
 @Injectable()
 export class AuthService {
@@ -57,7 +54,7 @@ export class AuthService {
 
     console.log('call singup...' + JSON.stringify(signupUser));
 
-    this.http.post(API_USER_AUTH_ENTRY_POINT_URL + 'users/sign-up' , signupUser, {
+    this.http.post(constant.API_USER_AUTH_ENTRY_POINT_URL + 'users/sign-up' , signupUser, {
       headers: new Headers({'Content-Type': 'application/json'})
     })
     .subscribe(
@@ -85,7 +82,7 @@ export class AuthService {
 
     console.log('call signin...' + JSON.stringify(signinUser));
 
-    this.http.post(API_USER_AUTH_ENTRY_POINT_URL + 'login' , signinUser, {
+    this.http.post(constant.API_USER_AUTH_ENTRY_POINT_URL + 'login' , signinUser, {
       withCredentials: true,
       headers: new Headers({'Content-Type': 'application/json', 'observe': 'response'})
     })
@@ -95,7 +92,7 @@ export class AuthService {
           const token = result.headers.get('Authorization');
 
           console.log('call getCustomerByName...')
-          this.http.get(API_ENTRY_POINT_URL + 'customers/' + username, {
+          this.http.get(constant.API_DOMAIN_ENTRY_POINT_URL + 'customers/' + username, {
             headers: new Headers({'Authorization': token})
           })
           .map(
@@ -221,16 +218,16 @@ export class AuthService {
   }
 
   private getTokenFromLocal(): string {
-    const token = localStorage.getItem(API_USER_AUTH_SESSION_JWT);
+    const token = localStorage.getItem(constant.API_USER_AUTH_SESSION_JWT);
     return token ? token : null;
   }
 
   private storeTokenToLocal(token: string) {
-    localStorage.setItem(API_USER_AUTH_SESSION_JWT, token);
+    localStorage.setItem(constant.API_USER_AUTH_SESSION_JWT, token);
   }
 
   private disposeTokenFromLocal() : void {
-    localStorage.removeItem(API_USER_AUTH_SESSION_JWT);
+    localStorage.removeItem(constant.API_USER_AUTH_SESSION_JWT);
   }
 
 }

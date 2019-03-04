@@ -3,13 +3,11 @@ import { Http, Headers, Response } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
-
 import { BookableData } from '../model/bookable-data.model';
 import { BookingData } from '../model/booking-data.model';
 import { AuthService } from '../user/auth.service';
 import { CustomerData } from '../model/customer-data.model';
-
-const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
+import * as constant from '../app-constant';
 
 @Injectable()
 export class BookingService {
@@ -32,7 +30,7 @@ export class BookingService {
     }
 
     let customerId: number = bookingData.customer.id;
-    this.http.post(API_ENTRY_POINT_URL + 'customers/' + customerId + '/bookings/', bookingData, {
+    this.http.post(constant.API_DOMAIN_ENTRY_POINT_URL + 'customers/' + customerId + '/bookings/', bookingData, {
       headers: new Headers({'Authorization': this.authService.token })
     })
       .subscribe(
@@ -52,7 +50,7 @@ export class BookingService {
     }
 
     console.log('call onRetrieveData...')
-    this.http.get(API_ENTRY_POINT_URL + 'customers/' + customerData.id +'/bookings/', {
+    this.http.get(constant.API_DOMAIN_ENTRY_POINT_URL + 'customers/' + customerData.id +'/bookings/', {
       headers: new Headers({'Authorization': this.authService.token})
     })
       .map(

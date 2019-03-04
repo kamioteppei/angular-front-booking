@@ -3,12 +3,10 @@ import { Http, Headers, Response } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
-
 import { BookableData } from '../model/bookable-data.model';
 import { RequestQueryBuilder } from '../other/search-query-builder';
 import { IQueryParams } from '../other/query-params.interface';
-
-const API_ENTRY_POINT_URL:string = 'http://localhost:8080/api/v1/'
+import * as constant from '../app-constant';
 
 @Injectable()
 export class BookableService {
@@ -28,7 +26,7 @@ export class BookableService {
     let requestParams: string = rqb.toRequestParameter();
     console.log('call onRetrieveData...' + requestParams);
 
-    this.http.get(API_ENTRY_POINT_URL + 'bookables/?' + requestParams,  {
+    this.http.get(constant.API_DOMAIN_ENTRY_POINT_URL + 'bookables/?' + requestParams,  {
       headers: new Headers({'Content-Type': 'application/json'})
      })
       .map(
